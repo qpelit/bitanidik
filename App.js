@@ -1,28 +1,39 @@
 import React from 'react';
-import { Platform, StatusBar, StyleSheet, View } from 'react-native';
-import { AppLoading, Asset, Font, Icon } from 'expo';
+import { Platform, StatusBar, StyleSheet,Button, View, Dimensions } from 'react-native';
+import { AppLoading, Asset, Font, Icon,ader } from 'expo';
+import { Header } from 'react-native-elements';
 import AppNavigator from './navigation/AppNavigator';
+
 
 export default class App extends React.Component {
   state = {
     isLoadingComplete: false,
   };
-
+  static navigationOptions = {
+    headerTitle: "uygulama",
+    headerRight: (
+      <Button
+        onPress={() => alert('This is a button!')}
+        title="Info"
+        color="#fff"
+      />
+    ),
+  };
   render() {
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
       return (
         <AppLoading
-          startAsync={this._loadResourcesAsync}
+        startAsync={this._loadResourcesAsync}
           onError={this._handleLoadingError}
           onFinish={this._handleFinishLoading}
         />
       );
     } else {
       return (
-        <View style={styles.container}>
+          <View style={styles.container}>
           {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
           <AppNavigator />
-        </View>
+          </View>    
       );
     }
   }
@@ -56,7 +67,12 @@ export default class App extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#fff',
+        flex: 1,
+        flexDirection: 'column',
+        alignItems: 'stretch',
+        justifyContent:'flex-start',
+
   },
 });
+
+
