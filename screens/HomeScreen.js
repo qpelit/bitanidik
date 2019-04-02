@@ -1,141 +1,87 @@
-import React, { Component } from 'react';
-import { View, Text, FlatList, ActivityIndicator } from 'react-native';
-import { ListItem, SearchBar } from 'react-native-elements';
+import React from 'react';
+import { StyleSheet, TouchableOpacity,Text, View, Button,FlatList, Dimensions } from 'react-native';
+import MaterialIcon from "react-native-vector-icons/FontAwesome5";
 
-class FlatListDemo extends Component {
-  constructor(props) {
-    super(props);
+const data = [
+  { key: 'Araba',iconName:'car-side',color:'#576574' }, 
+  { key: 'Ev',iconName:'home',color:'#10ac84' }, 
+  { key: 'Bakım',iconName:'hands-helping' ,color:'#f7b731'}, 
+  { key: 'Alışveriş',iconName:'shopping-bag',color:'#a55eea' }, 
+  { key: 'Karşılama',iconName:'handshake' ,color:'#FD7272'}, 
+  { key: 'Yurtdışı',iconName:'globe-americas' ,color:'#4b7bec'}, 
+  { key: 'Danışmanlık',iconName:'comment-dots',color:'#45aaf2' }, 
+  { key: 'Özel Gün',iconName:'grin-hearts' ,color:'#eb3b5a'}, 
+  { key: 'Diğer',iconName:'question-circle',color:'#778ca3'},
+];
 
-    this.state = {
-      loading: false,
-      data: list,
-      error: null,
-    };
+const formatData = (data, numColumns) => {
+  const numberOfFullRows = Math.floor(data.length / numColumns);
 
-    this.arrayholder = [];
+  let numberOfElementsLastRow = data.length - (numberOfFullRows * numColumns);
+  while (numberOfElementsLastRow !== numColumns && numberOfElementsLastRow !== 0) {
+    data.push({ key: `blank-${numberOfElementsLastRow}`, empty: true });
+    numberOfElementsLastRow++;
   }
+  return data;
+};
 
-  componentDidMount() {
-    //this.makeRemoteRequest();
-  }
-/*
-  makeRemoteRequest = () => {
-    const url = `https://randomuser.me/api/?&results=20`;
-    this.setState({ loading: true });
-
-    fetch(url)
-      .then(res => res.json())
-      .then(res => {
-        this.setState({
-          data: res.results,
-          error: res.error || null,
-          loading: false,
-        });
-        this.arrayholder = res.results;
-      })
-      .catch(error => {
-        this.setState({ error, loading: false });
-      });
-  };
-*/
-  renderSeparator = () => {
+const numColumns = 3;
+export default class App extends React.Component {
+  renderItem = ({ item, index }) => {
+    if (item.empty === true) {
+      return <View style={[styles.item, styles.itemInvisible]} />;
+    }
     return (
-      <View
-        style={{
-          height: 1,
-          width: '100%',
-          backgroundColor: '#CED0CE',
-        }}
-      />
-    );
-  };
-
-  searchFilterFunction = text => {
-    this.setState({
-      value: text,
-    });
-
-    const newData = list.filter(item => {
-      const itemData = item.subject.toUpperCase();
-      const textData = text.toUpperCase();
-      return itemData.indexOf(textData) > -1;
-    });
-    this.setState({
-      data: newData,
-    });
-  };
-
-  renderHeader = () => {
-    return (
-      <SearchBar
-        placeholder="Arama için..."
-        lightTheme
-        round
-        onChangeText={text => this.searchFilterFunction(text)}
-        autoCorrect={false}
-        value={this.state.value}
-      />
+      
+      <TouchableOpacity style={styles.item} onPress={() => this.props.navigation.navigate('DetailList',{itemName:item.key})}>
+      <MaterialIcon name={item.iconName} color={item.color} size={36} ></MaterialIcon>
+        <Text style={styles.itemText}>{item.key}</Text>
+      </TouchableOpacity>
     );
   };
 
   render() {
-    if (this.state.loading) {
-      return (
-        <View style={{ flex: 1}}>
-          <ActivityIndicator />
-        </View>
-      );
-    }
     return (
-      <View style={{ flex:1}}>
-        <FlatList
-          data={this.state.data}
-          renderItem={({ item }) => (
-            <ListItem
-              title={`${item.subject} ${item.username}`}
-              subtitle={item.city}
-            />
-          )}
-          keyExtractor={item => item.id}
-          ItemSeparatorComponent={this.renderSeparator}
-          ListHeaderComponent={this.renderHeader}
-        />
-    </View>   
+      <View style={styles.container}>
+      <Text style={styles.headerText}>Tanıdık Kategoriler</Text>
+      <FlatList
+        data={formatData(data, numColumns)}
+        renderItem={this.renderItem}
+        numColumns={numColumns}
+      />
+      </View>
     );
   }
 }
-const list = [
-  {
-    id:'1',
-    subject: 'Araba expertiz raporu',
-    username:'hakanp',
-    date:'21.02.2019',
-    categorie:'araba',
-    city:'Adana'
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    marginVertical: 20,
   },
-  {
-    id:'2',
-    subject: 'Yaşlı karşılama',
-    username:'oguz',
-    date:'21.02.2019',
-    categorie:'diger',
-    city:'İstanbul'
+  item: {
+    backgroundColor: '#fff',
+    borderWidth: 0.5,
+    borderColor: '#d6d7da',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+    height: (Dimensions.get('window').width / numColumns*3/4), // approximate a square
   },
-  {
-    id:'3',
-    subject: 'Ev bakılacak',
-    username:'hakanp',
-    date:'21.02.2019',
-    categorie:'araba',
-    city:'Adana'
+  itemInvisible: {
+    backgroundColor: 'transparent',
   },
-  {
-    id:'4',
-    subject: 'Yaşlı karşılama',
-    username:'oguz',
-    date:'21.02.2019',
-    categorie:'diger',
-    city:'İstanbul'
+  itemText: {
+    color: '#3d3e43',
+    marginTop:10,
+    fontWeight: 'bold',
+    fontSize:15
   },
-];
-export default FlatListDemo;
+  headerText:{
+    color: '#3d3e43',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    margin:5,
+    fontSize:18
+  }
+});

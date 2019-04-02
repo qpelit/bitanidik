@@ -6,6 +6,17 @@ import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
+import DetailListScreen from '../screens/DetailListScreen';
+
+var defaultNavigationOptions=   {
+  headerStyle: {
+    backgroundColor: '#F97F51',
+  },
+  headerTintColor: '#fff',
+  headerTitleStyle: {
+    fontWeight: 'bold',
+  },
+};
 
 
 const HomeStack = createStackNavigator({
@@ -20,19 +31,14 @@ const HomeStack = createStackNavigator({
       />
     ),
   }
+  }, 
+  DetailList: {
+    screen: DetailListScreen
   }
 },
 {
   initialRouteName: 'Home',
-  defaultNavigationOptions: {
-    headerStyle: {
-      backgroundColor: '#f4511e',
-    },
-    headerTintColor: '#fff',
-    headerTitleStyle: {
-      fontWeight: 'bold',
-    },
-  },
+  defaultNavigationOptions,
 }  
 );
 
@@ -56,15 +62,7 @@ const LinksStack = createStackNavigator({
 },
 {
   initialRouteName: 'Links',
-  defaultNavigationOptions: {
-    headerStyle: {
-      backgroundColor: '#f4511e',
-    },
-    headerTintColor: '#fff',
-    headerTitleStyle: {
-      fontWeight: 'bold',
-    },
-  },
+  defaultNavigationOptions,
 }  
 );
 
@@ -86,15 +84,7 @@ const SettingsStack = createStackNavigator({
 },
 {
   initialRouteName: 'Settings',
-  defaultNavigationOptions: {
-    headerStyle: {
-      backgroundColor: '#f4511e',
-    },
-    headerTintColor: '#fff',
-    headerTitleStyle: {
-      fontWeight: 'bold',
-    },
-  },
+  defaultNavigationOptions,
 }  
 );
 
@@ -112,5 +102,6 @@ SettingsStack.navigationOptions = {
 export default createBottomTabNavigator({
   HomeStack,
   LinksStack,
-  SettingsStack,
-});
+  SettingsStack});
+
+ 
