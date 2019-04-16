@@ -7,6 +7,9 @@ import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import DetailListScreen from '../screens/DetailListScreen';
+import LoadingScreen from '../screens/auth/Loading'
+import SignUpScreen from '../screens/auth/SignUp'
+import LoginScreen from '../screens/auth/Login'
 
 var defaultNavigationOptions=   {
   headerStyle: {
@@ -79,11 +82,22 @@ LinksStack.navigationOptions = {
 const SettingsStack = createStackNavigator({
   Settings: {
     screen: SettingsScreen,
-    navigationOptions:{ headerTitle: "Profile"}
+    navigationOptions:{ title: "Profile"}
+  },
+  Loading:{
+    screen:LoadingScreen,
+    navigationOptions:{ title: "Profile"}
+
+  },
+  SignUp:{
+    screen:SignUpScreen
+  },
+  Login:{
+    screen:LoginScreen
   }
 },
 {
-  initialRouteName: 'Settings',
+  initialRouteName: 'Loading',
   defaultNavigationOptions,
 }  
 );

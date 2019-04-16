@@ -25,18 +25,10 @@ class DetailList extends Component {
     this.arrayholder = [];
   }
 
-  static navigationOptions= ({navigation}) => {
-    return {
-      headerTitle: navigation.getParam('itemName'),
-    headerRight: (
-      <Button
-        onPress={() => alert('This is a button!')}
-        title="Info"
-        color="#fff"
-      />
-    )
-    }
-    }
+  static navigationOptions = ({ navigation, screenProps }) => ({
+    title: "My Profile!",
+    headerRight: <Button title="Menu" onPress={(navigation)=>{ navigation.navigate('DrawerOpen'); }} />,
+  });
 
   renderSeparator = () => {
     return (

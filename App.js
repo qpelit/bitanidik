@@ -1,24 +1,26 @@
 import React from 'react';
 import { Platform, StatusBar, StyleSheet,Button, View, Dimensions } from 'react-native';
 import { AppLoading, Asset, Font, Icon,ader } from 'expo';
-import { Header } from 'react-native-elements';
 import AppNavigator from './navigation/AppNavigator';
+import * as firebase from "firebase";
+import 'firebase/firestore';
 
 
 export default class App extends React.Component {
   state = {
     isLoadingComplete: false,
   };
-  static navigationOptions = {
-    headerTitle: "uygulama",
-    headerRight: (
-      <Button
-        onPress={() => alert('This is a button!')}
-        title="Info"
-        color="#fff"
-      />
-    ),
-  };
+  
+  componentDidMount(){
+    firebase.initializeApp({
+      apiKey: "AIzaSyCjp7zKaRCME4z_MZt3uMSuJCTrU0F5nnk",
+      authDomain: "bitanidik.firebaseapp.com",
+      databaseURL: "https://bitanidik.firebaseio.com",
+      projectId: "bitanidik",
+      storageBucket: "bitanidik.appspot.com",
+      messagingSenderId: "612852629929"
+    });
+  }
   render() {
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
       return (

@@ -1,25 +1,16 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity,Text, View, Button,FlatList, Dimensions } from 'react-native';
 import MaterialIcon from "react-native-vector-icons/FontAwesome5";
+import Categories from '../constants/Categories';
 
-const data = [
-  { key: 'Araba',iconName:'car-side',color:'#576574' }, 
-  { key: 'Ev',iconName:'home',color:'#10ac84' }, 
-  { key: 'Bakım',iconName:'hands-helping' ,color:'#f7b731'}, 
-  { key: 'Alışveriş',iconName:'shopping-bag',color:'#a55eea' }, 
-  { key: 'Karşılama',iconName:'handshake' ,color:'#FD7272'}, 
-  { key: 'Yurtdışı',iconName:'globe-americas' ,color:'#4b7bec'}, 
-  { key: 'Danışmanlık',iconName:'comment-dots',color:'#45aaf2' }, 
-  { key: 'Özel Gün',iconName:'grin-hearts' ,color:'#eb3b5a'}, 
-  { key: 'Diğer',iconName:'question-circle',color:'#778ca3'},
-];
+const data = Categories.categories;
 
 const formatData = (data, numColumns) => {
   const numberOfFullRows = Math.floor(data.length / numColumns);
 
   let numberOfElementsLastRow = data.length - (numberOfFullRows * numColumns);
   while (numberOfElementsLastRow !== numColumns && numberOfElementsLastRow !== 0) {
-    data.push({ key: `blank-${numberOfElementsLastRow}`, empty: true });
+    data.push({ label: `blank-${numberOfElementsLastRow}`, empty: true });
     numberOfElementsLastRow++;
   }
   return data;
@@ -33,9 +24,9 @@ export default class App extends React.Component {
     }
     return (
       
-      <TouchableOpacity style={styles.item} onPress={() => this.props.navigation.navigate('DetailList',{itemName:item.key})}>
+      <TouchableOpacity style={styles.item} onPress={() => this.props.navigation.navigate('DetailList',{itemName:item.label})}>
       <MaterialIcon name={item.iconName} color={item.color} size={36} ></MaterialIcon>
-        <Text style={styles.itemText}>{item.key}</Text>
+        <Text style={styles.itemText}>{item.label}</Text>
       </TouchableOpacity>
     );
   };
