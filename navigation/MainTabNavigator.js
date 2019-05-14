@@ -1,15 +1,20 @@
 import React from 'react';
 import { Platform,Button } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
+import MaterialIcon from "react-native-vector-icons/FontAwesome5";
 
 import TabBarIcon from '../components/TabBarIcon';
-import HomeScreen from '../screens/HomeScreen';
-import LinksScreen from '../screens/LinksScreen';
-import SettingsScreen from '../screens/SettingsScreen';
-import DetailListScreen from '../screens/DetailListScreen';
+import HomeScreen from '../screens/main/HomeScreen';
+import ListScreen from '../screens/main/ListScreen';
+import UserScreen from '../screens/main/UserScreen';
+import ListPostsScreen from '../screens/posts/ListPostsScreen';
+import OpenPostScreen from '../screens/posts/OpenPostScreen';
+import EditUserInfoScreen from '../screens/settings/user/EditUserInfoScreen';
+import SettingsScreen from '../screens/settings/SettingsSecreen';
 import LoadingScreen from '../screens/auth/Loading'
 import SignUpScreen from '../screens/auth/SignUp'
 import LoginScreen from '../screens/auth/Login'
+import NotificationScreen from '../screens/notification/NotificationScreen'
 
 var defaultNavigationOptions=   {
   headerStyle: {
@@ -27,16 +32,15 @@ const HomeStack = createStackNavigator({
     screen: HomeScreen,
     navigationOptions:{ headerTitle: "BİTANIDIK",
     headerRight: (
-      <Button
-        onPress={() => alert('This is a button!')}
-        title="Info"
-        color="#fff"
-      />
+      <MaterialIcon  size={26} style={{marginRight:10}} color='#fff' solid={true} onPress={() => this.props.navigation.navigate('EditSettings')} name="envelope"></MaterialIcon>
     ),
   }
   }, 
-  DetailList: {
-    screen: DetailListScreen
+  ListPosts: {
+    screen: ListPostsScreen
+  },
+  OpenPost: {
+    screen: OpenPostScreen
   }
 },
 {
@@ -57,36 +61,62 @@ HomeStack.navigationOptions = {
 
 
 
-const LinksStack = createStackNavigator({
-  Links: {
-    screen: LinksScreen,
-    navigationOptions:{ headerTitle: "Tanıdık Bul"}
+const ListStack = createStackNavigator({
+  List: {
+    screen: ListScreen,
+    navigationOptions:{ headerTitle: "Listem"}
   }
 },
 {
-  initialRouteName: 'Links',
+  initialRouteName: 'List',
   defaultNavigationOptions,
 }  
 );
 
-LinksStack.navigationOptions = {
-  tabBarLabel: 'Tanıdık Bul',
+ListStack.navigationOptions = {
+  tabBarLabel: 'Listem',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-search' : 'md-search'}
+      name={Platform.OS === 'ios' ? 'ios-list' : 'md-list'}
+    />
+  ),
+};
+const NotificationStack = createStackNavigator({
+  Notification: {
+    screen: NotificationScreen,
+    navigationOptions:{ headerTitle: "Bildirimler"}
+  }
+},
+{
+  initialRouteName: 'Notification',
+  defaultNavigationOptions,
+}  
+);
+
+NotificationStack.navigationOptions = {
+  tabBarLabel: 'Bildirimler',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={Platform.OS === 'ios' ? 'ios-notifications' : 'md-notifications'}
     />
   ),
 };
 
-const SettingsStack = createStackNavigator({
+const UserStack = createStackNavigator({
+  UserScreen: {
+    screen: UserScreen
+  },
+  EditUserInfo: {
+    screen: EditUserInfoScreen
+  },
   Settings: {
-    screen: SettingsScreen,
-    navigationOptions:{ title: "Profile"}
+    screen: SettingsScreen
   },
   Loading:{
     screen:LoadingScreen,
-    navigationOptions:{ title: "Profile"}
+    navigationOptions:{ title: "Profil"}
 
   },
   SignUp:{
@@ -103,7 +133,7 @@ const SettingsStack = createStackNavigator({
 );
 
 
-SettingsStack.navigationOptions = {
+UserStack.navigationOptions = {
   tabBarLabel: 'Ben',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
@@ -115,7 +145,9 @@ SettingsStack.navigationOptions = {
 
 export default createBottomTabNavigator({
   HomeStack,
-  LinksStack,
-  SettingsStack});
+  ListStack,
+  NotificationStack,
+  UserStack
+  });
 
  

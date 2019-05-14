@@ -3,10 +3,9 @@ import { StyleSheet, View } from 'react-native';
 import {Button, Avatar, Text, Rating} from 'react-native-elements';
 import * as firebase from "firebase";
 import {Tab, Tabs, ScrollableTab } from 'native-base';
-import UserInformationScreen from '../screens/UserInformationScreen'
-import MaterialIcon from "react-native-vector-icons/FontAwesome5";
+import UserInfoScreen from '../user/UserInfoScreen'
 
-export default class SettingsScreen extends React.Component {
+export default class UserScreen extends React.Component {
   state = { currentUser: null, userInformations: null}
   constructor(props){
     super(props);
@@ -71,16 +70,14 @@ export default class SettingsScreen extends React.Component {
         </View>
       </View>
 
-      <Tabs tabBarUnderlineStyle={{ backgroundColor: '#f65857' }} renderTabBar={()=> <ScrollableTab  style={{ backgroundColor: "white" }}  />}  >
+      <Tabs tabBarUnderlineStyle={{ backgroundColor: '#f65857' }} 
+            renderTabBar={()=> <ScrollableTab  style={{ backgroundColor: "white" }}  />} >
           <Tab  heading="Bilgiler" activeTabStyle={{ backgroundColor: "white" }} tabStyle={{ backgroundColor: "white" }}>
-          <UserInformationScreen/>
+          <UserInfoScreen props={this.props}/>
           </Tab>
           <Tab heading="Yorumlar" activeTabStyle={{ backgroundColor: "white" }} tabStyle={{backgroundColor: "white"}}>
           </Tab>
         </Tabs>
-
-
-        <Button title="Çıkış Yap" style={{paddingVertical:5}} onPress={this.handleSignOut.bind(this)} />
       </View>
     )
   }

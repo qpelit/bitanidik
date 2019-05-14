@@ -1,7 +1,7 @@
 const categories = [
     { label: 'Araba',value:'1',key:'1',iconName:'car-side',color:'#576574' }, 
     { label: 'Ev',value:'2',key:'2',iconName:'home',color:'#10ac84' }, 
-    { label: 'Bakım',value:'3',key:'3',iconName:'hands-helping' ,color:'#f7b731'}, 
+    { label: 'Bakım',value:'3',key:'3',iconName:'heartbeat' ,color:'#f7b731'}, 
     { label: 'Alışveriş',value:'4',key:'4',iconName:'shopping-bag',color:'#a55eea' }, 
     { label: 'Karşılama',value:'5',key:'5',iconName:'handshake' ,color:'#FD7272'}, 
     { label: 'Yurtdışı',value:'6',key:'6',iconName:'globe-americas' ,color:'#4b7bec'}, 

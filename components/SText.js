@@ -3,7 +3,7 @@ import {StyleSheet} from 'react-native';
 import {Text} from 'react-native-elements';
 export class SText extends React.Component {
   render() {
-    return <Text {...this.props} style={[this.props.style, styles.text]} />;
+    return <Text {...this.props} style={[this.props.style, styles.text,{padding:this.props.paddingTrue?6:0}]} />;
   }
 }
 const styles = StyleSheet.create({
