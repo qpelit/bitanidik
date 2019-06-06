@@ -24,7 +24,7 @@ export default class HomeScreen extends React.Component {
     }
     return (
       
-      <TouchableOpacity style={styles.item} onPress={() => this.props.navigation.navigate('ListPosts',{itemName:item.label})}>
+      <TouchableOpacity style={styles.item} onPress={() => this.props.navigation.navigate('ListPosts',{itemName:item.label,itemKey:item.key})}>
       <MaterialIcon name={item.iconName} color={item.color} size={36} ></MaterialIcon>
         <Text style={styles.itemText}>{item.label}</Text>
       </TouchableOpacity>

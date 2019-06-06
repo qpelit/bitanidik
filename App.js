@@ -4,7 +4,11 @@ import { AppLoading, Asset, Font, Icon,ader } from 'expo';
 import AppNavigator from './navigation/AppNavigator';
 import * as firebase from "firebase";
 import 'firebase/firestore';
+import { Provider } from 'react-redux';
 
+import configureStore from './store';
+
+const store = configureStore()
 
 export default class App extends React.Component {
   state = {
@@ -34,7 +38,9 @@ export default class App extends React.Component {
       return (
           <View style={styles.container}>
           {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-          <AppNavigator />
+          <Provider store = { store }>
+          <AppNavigator/>
+            </Provider>
           </View>    
       );
     }

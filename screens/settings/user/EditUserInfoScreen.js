@@ -10,13 +10,14 @@ import {InputDatePicker} from '../../../components/input/InputDatePicker';
 import {InputText} from '../../../components/input/InputText';
 import Button from '../../../components/Button';
 import * as firebase from 'firebase'
-
+import { connect } from 'react-redux';
+import { updateUserInfo } from '../../../actions/userInfo';
 
 const education = Education.education;
 const provinces = Provinces.provinces;
 const work = Work.work;
 
-export default class EditUserInfoScreen extends React.Component {
+class EditUserInfoScreen extends React.Component {
   constructor(props){
     super(props);
     this.inputRefs = {
@@ -26,11 +27,13 @@ export default class EditUserInfoScreen extends React.Component {
       quickInfo:null
     };
     this.state = {
-      province:null,
-      education:null,
-      work:null,
-      birthDay:null,
-      quickInfo:null
+      userData:{
+      province:this.props.userInfo.province,
+      education:this.props.userInfo.education,
+      work:this.props.userInfo.work,
+      birthDay:this.props.userInfo.birthDay,
+      quickInfo:this.props.userInfo.quickInfo
+      }
     };
   }
     static navigationOptions= ({navigation}) => {
@@ -39,13 +42,10 @@ export default class EditUserInfoScreen extends React.Component {
     }
     }
   saveUserInfosToDB = ()=>{
-    firebase.database().ref('/userInfos/'+ firebase.auth().currentUser.uid).update({
-      province: this.state.province,
-      birthDay: this.state.birthDay,
-      work : this.state.work,
-      education : this.state.education,
-      quickInfo : this.state.quickInfo
-    }).then(()=>this.props.navigation.push('Loading',{'userInfos':this.state})).catch();
+    const { goBack } = this.props.navigation;
+    const {userData} = this.state;
+    firebase.database().ref('/userInfos/'+ firebase.auth().currentUser.uid).update({...userData}).
+    then(()=>{this.props.updateUserData({...userData}); goBack()}).catch();
   };
 
   render() {
@@ -63,12 +63,12 @@ export default class EditUserInfoScreen extends React.Component {
         placeholderLabel='İl seçiniz...'
         items={provinces}
         label='Şehir'
-        onValueChange={value => {
-          this.setState({
-            province: value,
-          });
+         onValueChange={value => {
+          this.setState(
+            state => (state.userData.province = value, state)
+          );
         }}
-        value={this.state.province}
+        value={this.state.userData.province}
         ref={el => {
           this.inputRefs.province = el;
         }}
@@ -77,9 +77,9 @@ export default class EditUserInfoScreen extends React.Component {
         placeholderLabel='Eğitim durumunuzu seçiniz...'
         items={education}
         onValueChange={value => {
-          this.setState({
-            education: value,
-          });
+          this.setState(
+            state => (state.userData.education = value, state)
+          );
         }}
         label='Eğitim'
         // onUpArrow={() => {
@@ -88,31 +88,30 @@ export default class EditUserInfoScreen extends React.Component {
         // onDownArrow={() => {
         //   this.inputRefs.textArea.togglePicker();
         // }}
-        value={this.state.education}
+        value={this.state.userData.education}
         ref={el => {
           this.inputRefs.education = el;
         }}
       />
       <InputDatePicker
       label='Doğum Yılınız'
-      placeholderLabel='Doğum tarihinizi seçiniz...'
-      date={this.state.birthDay}
-      mode="date"
+      placeholder='Doğum tarihinizi seçiniz...'
+      date={this.state.userData.birthDay}
       format="DD-MM-YYYY"
       minDate={new Date(new Date().setFullYear(new Date().getFullYear() - 120))}
       maxDate={new Date(new Date().setFullYear(new Date().getFullYear() - 10))}
-      onDateChange={(birthDay) => {this.setState({birthDay: birthDay})}}
+      onDateChange={(date) => {this.setState(state => (state.userData.birthDay = date, state))}}
       />
       <InputPicker
         placeholderLabel='İş durumunuzu seçiniz...'
         items={work}
         label='İş Durumu'
         onValueChange={value => {
-          this.setState({
-            work: value,
-          });
+          this.setState(
+            state => (state.userData.work = value, state)
+          );
         }}
-        value={this.state.work}
+        value={this.state.userData.work}
         ref={el => {
           this.inputRefs.work = el;
         }}
@@ -121,10 +120,11 @@ export default class EditUserInfoScreen extends React.Component {
       placeholder="Profilinde yayınlanacak birşeyler yaz..."
       label='Ön Yazı'
       numberOfLines={10}
+      value={this.state.userData.quickInfo}
       onChangeText={value => {
-        this.setState({
-          quickInfo: value,
-        });
+        this.setState(
+          state => (state.userData.quickInfo = value, state)
+        );
       }}
       multiline={true}
       style={{height: 150,justifyContent: "flex-start"}}
@@ -147,5 +147,21 @@ export default class EditUserInfoScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    padding:10
   }
 });
+const mapStateToProps = state => {
+  return {
+    userInfo: state.userInfo.userInfo
+  }
+}
+const mapDispatchToProps = dispatch => {
+  return {
+    updateUserData: (userInfo) => {
+      dispatch(updateUserInfo(userInfo))
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(EditUserInfoScreen)
+

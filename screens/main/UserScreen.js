@@ -4,8 +4,10 @@ import {Button, Avatar, Text, Rating} from 'react-native-elements';
 import * as firebase from "firebase";
 import {Tab, Tabs, ScrollableTab } from 'native-base';
 import UserInfoScreen from '../user/UserInfoScreen'
+import { connect } from 'react-redux';
+import { updateUserInfo } from '../../actions/userInfo';
 
-export default class UserScreen extends React.Component {
+class UserScreen extends React.Component {
   state = { currentUser: null, userInformations: null}
   constructor(props){
     super(props);
@@ -17,8 +19,11 @@ export default class UserScreen extends React.Component {
   }
   componentDidMount() {
     const { currentUser } = firebase.auth();
-    firebase.database().ref('/userInfos/'+ firebase.auth().currentUser.uid).once('value')
-    .then(snapshot=> this.setState({userInformations : snapshot.val() }))
+    const db = firebase.database();
+    const userRef = db.ref('/userInfos/'+ currentUser.uid);
+    userRef.once('value')
+    .then(snapshot=>{  this.setState({userInformations : snapshot.val()});
+    this.props.updateUserData({...snapshot.val()})})
     .catch(error => this.setState({ errorMessage: error.message }));
     
     this.setState({ currentUser })
@@ -73,7 +78,7 @@ export default class UserScreen extends React.Component {
       <Tabs tabBarUnderlineStyle={{ backgroundColor: '#f65857' }} 
             renderTabBar={()=> <ScrollableTab  style={{ backgroundColor: "white" }}  />} >
           <Tab  heading="Bilgiler" activeTabStyle={{ backgroundColor: "white" }} tabStyle={{ backgroundColor: "white" }}>
-          <UserInfoScreen props={this.props}/>
+          <UserInfoScreen/>
           </Tab>
           <Tab heading="Yorumlar" activeTabStyle={{ backgroundColor: "white" }} tabStyle={{backgroundColor: "white"}}>
           </Tab>
@@ -92,5 +97,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent:'space-between'
   }
-})
+});
+const mapDispatchToProps = dispatch => {
+  return {
+    updateUserData: (userInfo) => {
+      dispatch(updateUserInfo(userInfo))
+    }
+  }
+}
 
+export default connect(null, mapDispatchToProps)(UserScreen)

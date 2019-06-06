@@ -5,6 +5,10 @@ import { LayoutRow } from "../../components/view/LayoutRow";
 import { SText } from "../../components/SText";
 import  Button from "../../components/Button";
 import { ScrollView } from "react-native-gesture-handler";
+import Provinces from '../../constants/Provinces';
+import Categories from '../../constants/Categories';
+const provinces = Provinces.provinces;
+const categories = Categories.categories;
 export default class OpenPost extends Component {
 
 
@@ -36,15 +40,15 @@ export default class OpenPost extends Component {
              </CardItem>
              <CardItem bordered style={styles.row}>
             <Text>İl</Text>
-            <View style={styles.rightRow}><SText >{this.post.city}</SText></View>
+            <View style={styles.rightRow}><SText >{provinces[this.post.province-1].label}</SText></View>
             </CardItem>
             <CardItem bordered  style={styles.row}>
             <Text>Kategori</Text>
-            <View style={styles.rightRow}><SText >{this.post.categorie}</SText></View>
+            <View style={styles.rightRow}><SText >{categories[this.post.category].label}</SText></View>
             </CardItem>
             <CardItem bordered style={styles.row}>
             <Text>Fiyat</Text>
-            <View style={styles.rightRow}><SText >{this.post.price} TL</SText></View>
+            <View style={styles.rightRow}><SText >{this.post.budget} TL</SText></View>
             </CardItem>
           </Card>
         </ScrollView>
@@ -54,7 +58,7 @@ export default class OpenPost extends Component {
               backgroundColor='#2bca54'
               style={{paddingTop:5,
               }}
-              onPress={() => this.handleSignOut()} 
+              onPress={() => this.props.navigation.navigate('BidAction',{post:this.post})} 
                 />
       </View>
 

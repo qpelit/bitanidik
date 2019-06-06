@@ -5,53 +5,65 @@ import { ScrollView } from 'react-native-gesture-handler';
 import {SText} from '../../components/SText'
 import MaterialIcon from "react-native-vector-icons/FontAwesome5";
 import { LayoutRow } from '../../components/view/LayoutRow';
+import { connect } from 'react-redux';
+import Education from '../../constants/userInfo/Education';
+import Work from '../../constants/userInfo/Work';
+import Provinces from '../../constants/Provinces';
+import moment from 'moment';
 
-export default class UserInfoScreen extends React.Component {
+const education = Education.education;
+const provinces = Provinces.provinces;
+const work = Work.work;
 
+class UserInfoScreen extends React.Component {
   constructor(props) {
     super(props);
-    this.userInfos=this.props.navigation?this.props.navigation.getParam('userInfos'):null;
 }
 render() {
     return (
-        <ScrollView>
-        <View style={styles.container}>
-
-                <LayoutRow style={styles.row}>
-                <Text style={styles.title}>
-                  <MaterialIcon
-                    name="address-card"
-                    size={16}
-                  />{" "}Kişisel Bilgiler</Text>  
-                <View style={{flexDirection:'row',justifyContent:'flex-end'}}><SText>26, İstanbul</SText></View>
-                </LayoutRow>
-                 
-                <LayoutRow style={styles.row}>
-                <Text style={styles.title}>
-                <MaterialIcon
-                    name="graduation-cap"
-                    size={16}
-                  />{" "}Eğitim Bilgileri</Text>   
-                <View style={{flexDirection:'row',justifyContent:'flex-end'}}><SText >{this.userInfos && this.userInfos.education}</SText></View>
-                </LayoutRow>
-
-                <LayoutRow style={styles.row}>
-                <Text style={styles.title}>
-                <MaterialIcon
-                    name="building"
-                    size={16}
-                  />{" "}İş Durumu</Text>   
-                <View style={{flexDirection:'row',justifyContent:'flex-end'}}><SText>Çalışıyor</SText></View>
-                </LayoutRow>
- 
-                <Text style={styles.title}>
-                <MaterialIcon
-                    name="info-circle"
-                    size={16}
-                  />{" "}Ön Yazı</Text>   
-                <SText paddingTrue={true}>İstanbul'da ki her işinizle ilgilenilir.</SText>   
+      <ScrollView>
+      <View style={styles.container}>
+        <LayoutRow style={styles.row}>
+        <Text style={styles.title}>
+          <MaterialIcon
+            name="address-card"
+            size={16}
+          />{" "}Kişisel Bilgiler</Text>  
+        <View style={{flexDirection:'row',justifyContent:'flex-end'}}>
+        <SText>{this.props.userInfo.birthDay && moment().diff(moment(this.props.userInfo.birthDay, 'DD-MM-YYYY'), 'years') || '-'} </SText>
+        <SText>{this.props.userInfo.province &&', '+provinces[this.props.userInfo.province-1].label || '-'}</SText>
         </View>
-        </ScrollView>
+        </LayoutRow>
+        <LayoutRow style={styles.row}>
+        <Text style={styles.title}>
+        <MaterialIcon
+            name="graduation-cap"
+            size={16}
+          />{" "}Eğitim Bilgileri</Text>   
+        <View style={{flexDirection:'row',justifyContent:'flex-end'}}>
+        <SText>{this.props.userInfo.education && education[this.props.userInfo.education].label || '-'}</SText>
+        </View>
+        </LayoutRow>
+
+        <LayoutRow style={styles.row}>
+        <Text style={styles.title}>
+        <MaterialIcon
+            name="building"
+            size={16}
+          />{" "}İş Durumu</Text>   
+        <View style={{flexDirection:'row',justifyContent:'flex-end'}}>
+        <SText>{this.props.userInfo.work && work[this.props.userInfo.work].label || '-'}</SText>
+        </View>
+        </LayoutRow>
+
+        <Text style={styles.title}>
+        <MaterialIcon
+            name="info-circle"
+            size={16}
+          />{" "}Ön Yazı</Text>   
+        <SText paddingTrue={true}>{this.props.userInfo.quickInfo && this.props.userInfo.quickInfo || '-'}</SText>   
+      </View>
+      </ScrollView>
     );
   }
 }
@@ -75,3 +87,13 @@ const styles = StyleSheet.create({
   })
 
 
+  const mapStateToProps = state => {
+    return {
+      userInfo: state.userInfo.userInfo
+    }
+  }
+  
+  
+  export default connect(mapStateToProps)(UserInfoScreen)
+
+  

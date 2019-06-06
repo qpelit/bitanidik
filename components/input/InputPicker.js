@@ -14,7 +14,7 @@ export class InputPicker extends React.Component {
       [this.props.style],
     ]);
     return (
-      <View style={{padding:10}}>
+      <View style={{padding:5}}>
         <Text style={itemTextStyle.itemText}>{this.props.label}</Text>
         <RNPickerSelect
         placeholder={{...placeholder,label:this.props.placeholderLabel}}

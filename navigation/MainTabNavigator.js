@@ -15,6 +15,8 @@ import LoadingScreen from '../screens/auth/Loading'
 import SignUpScreen from '../screens/auth/SignUp'
 import LoginScreen from '../screens/auth/Login'
 import NotificationScreen from '../screens/notification/NotificationScreen'
+import AddPostScreen from '../screens/posts/AddPostScreen';
+import BidActionScreen from '../screens/bids/BidActionScreen';
 
 var defaultNavigationOptions=   {
   headerStyle: {
@@ -41,6 +43,9 @@ const HomeStack = createStackNavigator({
   },
   OpenPost: {
     screen: OpenPostScreen
+  },
+  BidAction:{
+    screen : BidActionScreen
   }
 },
 {
@@ -65,6 +70,10 @@ const ListStack = createStackNavigator({
   List: {
     screen: ListScreen,
     navigationOptions:{ headerTitle: "Listem"}
+  },
+  AddPost:{
+    screen: AddPostScreen,
+    navigationOptions:{ headerTitle: "Yeni İlan Ver"}
   }
 },
 {

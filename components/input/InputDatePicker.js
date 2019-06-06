@@ -10,7 +10,7 @@ export class InputDatePicker extends React.Component {
       color: '#79797b',
     };
     return (
-      <View style={{padding:10}}>
+      <View style={{padding:5}}>
         <Text style={styles.itemText}>{this.props.label}</Text>
         <DatePicker
         {...this.props}
@@ -19,6 +19,7 @@ export class InputDatePicker extends React.Component {
         style={[this.props.style,{width: 200}]}
         showIcon={false}
         locale="tr_tr"
+        placeholderText={placeholder}
         confirmBtnText="Tamam"
         cancelBtnText="İptal"
         customStyles={{
@@ -49,6 +50,6 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
     borderColor: '#d8d6d6',
     borderRadius: 4,
-    color: '#d8d6d6',
+    color: '#3d3e43',
     }
 });

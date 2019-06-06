@@ -9,7 +9,7 @@ export class InputText extends React.Component {
       color: '#79797b',
     };
     return (
-      <View style={{padding:10}}>
+      <View style={{padding:5}}>
         <Text style={styles.itemText}>{this.props.label}</Text>
         <TextInput
         {...this.props}

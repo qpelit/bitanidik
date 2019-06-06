@@ -4,7 +4,9 @@ import { ListItem, SearchBar } from 'react-native-elements';
 import { SText } from '../../components/SText';
 import { LayoutRow } from '../../components/view/LayoutRow';
 import MaterialIcon from "react-native-vector-icons/FontAwesome5";
-
+import * as firebase from "firebase";
+import Provinces from '../../constants/Provinces';
+const provinces = Provinces.provinces;
 
 var defaultNavigationOptions=   {
   headerStyle: {
@@ -18,6 +20,7 @@ var defaultNavigationOptions=   {
 
 
 class ListPosts extends Component {
+  state = { postList: []}
 
   constructor(props) {
     super(props);
@@ -30,13 +33,33 @@ class ListPosts extends Component {
     this.arrayholder = [];
   }
 
+  componentDidMount() {
+    const { currentUser } = firebase.auth();
+    firebase.database()
+    .ref('posts/')
+    .orderByChild('category')
+    .equalTo(this.props.navigation.getParam("itemKey"))
+    .on('value',(snapshot)=>{
+      var arr=[];
+      snapshot.forEach((childSnapshot)=>{
+          arr.push({"id":childSnapshot.key,...childSnapshot.val()})
+        })
+        this.setState({
+          postList :arr && arr || []
+        })
+      }), function (errorObject) {
+        console.log("The read failed: " + errorObject.code);
+      };
+    
+    this.setState({ currentUser })
+  }
   static navigationOptions= ({navigation}) => {
     return {
-      headerTitle: navigation.getParam('itemName'),
-    headerRight: (
-      <MaterialIcon  size={22} style={{marginRight:10}} color='#fff' onPress={() => this.props.navigation.navigate('EditSettings')} name="filter"></MaterialIcon>
-    )
-    }
+        headerTitle: navigation.getParam('itemName'),
+        headerRight: (
+          <MaterialIcon  size={22} style={{marginRight:10}} color='#fff' onPress={() => this.props.navigation.navigate('EditSettings')} name="filter"></MaterialIcon>
+        )
+          }
     }
 
   renderSeparator = () => {
@@ -78,7 +101,9 @@ class ListPosts extends Component {
       />
     );
   };
-
+  getCamelCase = (str) =>{
+    return str[0]+str.substr(1,str.length).replace(/I/g, 'ı' ).toLowerCase();
+  }
   render() {
 
     if (this.state.loading) {
@@ -91,11 +116,11 @@ class ListPosts extends Component {
     return (
       <View style={{ flex:1}}>
         <FlatList
-          data={this.state.data}
+          data={this.state.postList}
           renderItem={({ item }) => (
             <ListItem
-              title={(<LayoutRow><View><SText>{item.title}</SText></View><View style={{flexDirection:'row',justifyContent:'flex-end'}}><Text>{item.date}</Text></View></LayoutRow>)}
-              subtitle={(<LayoutRow><Text>{item.city}</Text><Text style={{color:'green'}}>{`${item.price} TL`}</Text></LayoutRow>)}
+              title={(<LayoutRow><View><SText>{item.title}</SText></View><View style={{flexDirection:'row',justifyContent:'flex-end'}}><Text>{item.lastDate}</Text></View></LayoutRow>)}
+              subtitle={(<LayoutRow><Text>{this.getCamelCase(provinces[item.province-1].label)}</Text><Text style={{color:'green'}}>{`${item.budget} TL`}</Text></LayoutRow>)}
               onPress={()=>this.props.navigation.navigate('OpenPost',{item:item})}
             />
           )}

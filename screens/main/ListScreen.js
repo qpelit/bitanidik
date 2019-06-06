@@ -10,9 +10,10 @@ import {Tab, Tabs, ScrollableTab } from 'native-base';
 import MaterialIcon from "react-native-vector-icons/FontAwesome5";
 import { LayoutRow } from '../../components/view/LayoutRow';
 import moment from "moment";
-
-
-export default class LinksScreen extends React.Component {
+import Button from '../../components/Button'
+import MyPostsScreen from '../lists/MyPostsScreen'
+import MyBidsScreen from '../lists/MyBidsScreen';
+ export default class ListScreen extends React.Component {
   constructor(props){
     super(props);
     this.state = {
@@ -23,6 +24,7 @@ export default class LinksScreen extends React.Component {
 
     this.arrayholder = [];
   }
+
   renderList = (type) => {
     return(
       list.map((item, i) => (
@@ -34,7 +36,7 @@ export default class LinksScreen extends React.Component {
             size={22}
             />}
           titleStyle={{fontSize:15.5}}
-          title={(<LayoutRow><View><Text>{item.title}</Text></View><Text>{item.remainedTime}</Text></LayoutRow>)}
+          title={(<LayoutRow><View><Text>{item.subject}</Text></View><Text>{item.remainedTime}</Text></LayoutRow>)}
           bottomDivider={list.length-1==i?false:true}
           chevron={true}
         />
@@ -44,22 +46,26 @@ export default class LinksScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-      
       <Tabs tabBarUnderlineStyle={{ backgroundColor: '#f65857' }}  edgeHitWidth={5} 
             renderTabBar={()=> <ScrollableTab  style={{ backgroundColor: "white" }}  />} >
-          <Tab  heading="Yapılacaklar" activeTabStyle={{ backgroundColor: "white" }} tabStyle={{ backgroundColor: "white" }}>
+          <Tab  heading="İlanlarım" activeTabStyle={{ backgroundColor: "white" }} tabStyle={{ backgroundColor: "white" }}>
+          <ScrollView>
+          <MyPostsScreen/>
+          </ScrollView>
+          <Button
+          title='Yeni İlan Ver'
+          iconName='plus'
+          onPress={()=>this.props.navigation.navigate("AddPost")}
+          />
+          </Tab>
+          <Tab heading="Yapılacaklar" activeTabStyle={{ backgroundColor: "white" }} tabStyle={{backgroundColor: "white"}}>
           <ScrollView>
           {this.renderList('clock')}
           </ScrollView>
           </Tab>
-          <Tab heading="İlanlarım" activeTabStyle={{ backgroundColor: "white" }} tabStyle={{backgroundColor: "white"}}>
-          <ScrollView>
-          {this.renderList('file')}
-          </ScrollView>
-          </Tab>
           <Tab heading="Tekliflerim" activeTabStyle={{ backgroundColor: "white" }} tabStyle={{backgroundColor: "white"}}>
           <ScrollView>
-          {this.renderList('flag')}
+          <MyBidsScreen/>
           </ScrollView>
           </Tab>
         </Tabs>
@@ -70,8 +76,7 @@ export default class LinksScreen extends React.Component {
 const list = [
   {
     id:'1',
-    title:'Araba expertiz raporu',
-    subject: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+    subject: 'Araba expertiz raporu',
     username:'hakanp',
     date:'21.02.2019',
     lastDate:'23.02.2019',
@@ -81,8 +86,7 @@ const list = [
   },
   {
     id:'2',
-    title: 'Yaşlı karşılama',
-    subject: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+    subject: 'Yaşlı karşılama',
     username:'oguz',
     date:'21.02.2019',
     lastDate:'23.02.2019',
@@ -92,8 +96,7 @@ const list = [
   },
   {
     id:'3',
-    title: 'Ev bakılacak',
-    subject: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+    subject: 'Ev bakılacak',
     username:'hakanp',
     date:'21.02.2019',
     lastDate:'23.02.2019',
@@ -103,8 +106,7 @@ const list = [
   },
   {
     id:'4',
-    title: 'Araba expertiz raporu',
-    subject: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+    subject: 'Araba expertiz raporu',
     username:'hakanp',
     date:'21.02.2019',
     lastDate:'23.02.2019',
@@ -114,8 +116,8 @@ const list = [
   },
   {
     id:'5',
-    title: 'Yaşlı karşılama',
-    subject: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+    subject: 'Yaşlı karşılama',
+    username:'oguz',
     date:'21.02.2019',
     lastDate:'23.02.2019',
     remainedTime:'16s',
@@ -124,8 +126,8 @@ const list = [
   },
   {
     id:'6',
-    title: 'Ev bakılacak',
-    subject: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+    subject: 'Ev bakılacak',
+    username:'hakanp',
     date:'21.02.2019',
     lastDate:'23.02.2019',
     remainedTime:'16s',
